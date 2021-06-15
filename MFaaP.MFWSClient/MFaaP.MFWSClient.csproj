@@ -28,6 +28,8 @@
     <RepositoryUrl>https://github.com/M-Files/Libraries.MFWSClient</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Exosoft Limited.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
   <Target Name="PostBuild" AfterTargets="Pack" Condition=" '$(Configuration)' == 'Release'">

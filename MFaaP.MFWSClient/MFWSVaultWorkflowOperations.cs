@@ -21,6 +21,49 @@ namespace MFaaP.MFWSClient
 		{
 		}
 
+		#region Get workflows
+
+		/// <summary>
+		/// Gets a list of all workflows in the vault.
+		/// </summary>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>All workflows in the vault.</returns>
+		/// <remarks>This may be filtered by the user's permissions.</remarks>
+		public async Task<List<Workflow>> GetAllWorkflowsAsync(CancellationToken token = default(CancellationToken))
+		{
+			// Create the request.
+			var request = new RestRequest($"/REST/structure/workflows.aspx");
+
+			// Make the request and get the response.
+			var response = await this.MFWSClient.Get<List<Workflow>>(request, token)
+				.ConfigureAwait(false);
+
+			// Return the data.
+			return response.Data;
+		}
+
+		/// <summary>
+		/// Gets all workflows.
+		/// </summary>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		/// <summary>
+		/// Gets a list of all classes in the vault.
+		/// </summary>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>All classes in the vault.</returns>
+		/// <remarks>This may be filtered by the user's permissions.</remarks>
+		public List<Workflow> GetAllWorkflows(CancellationToken token = default(CancellationToken))
+		{
+			// Execute the async method.
+			return this.GetAllWorkflowsAsync(token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
+		}
+
+		#endregion
+
 		#region Get workflow states
 
 		/// <summary>
@@ -29,16 +72,17 @@ namespace MFaaP.MFWSClient
 		/// <param name="workflowId">The workflow identifier.</param>
 		/// <param name="token">A cancellation token for the request.</param>
 		/// <returns>An awaitable task for the request.</returns>
-		public async Task<WorkflowState[]> GetWorkflowStatesAsync(int workflowId, CancellationToken token = default(CancellationToken))
+		public async Task<List<WorkflowState>> GetWorkflowStatesAsync(int workflowId, CancellationToken token = default(CancellationToken))
 		{
 			// Create the request.
 			var request = new RestRequest($"/REST/structure/workflows/{workflowId}/states.aspx");
 
 			// Execute the request and parse the response.
-			var response = await this.MFWSClient.Get<List<WorkflowState>>(request, token);
+			var response = await this.MFWSClient.Get<List<WorkflowState>>(request, token)
+				.ConfigureAwait(false);
 
 			// Return the typed response.
-			return response?.Data.ToArray();
+			return response.Data;
 		}
 
 		/// <summary>
@@ -47,7 +91,7 @@ namespace MFaaP.MFWSClient
 		/// <param name="workflowId">The workflow identifier.</param>
 		/// <param name="token">A cancellation token for the request.</param>
 		/// <returns>An awaitable task for the request.</returns>
-		public WorkflowState[] GetWorkflowStates(int workflowId, CancellationToken token = default(CancellationToken))
+		public List<WorkflowState> GetWorkflowStates(int workflowId, CancellationToken token = default(CancellationToken))
 		{
 			// Execute the async method.
 			return this.GetWorkflowStatesAsync(workflowId, token)
@@ -71,6 +115,44 @@ namespace MFaaP.MFWSClient
 
 			// Filter to just the first one.
 			return workflowStates.FirstOrDefault(state => (state.Name ?? string.Empty).Equals(stateName, StringComparison.InvariantCultureIgnoreCase));
+		}
+
+		#endregion
+
+		#region Get workflow first states
+
+		/// <summary>
+		/// Gets workflow first states in the provided workflow.
+		/// </summary>
+		/// <param name="workflowId">The workflow identifier.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public async Task<List<WorkflowState>> GetWorkflowFirstStatesAsync(int workflowId, CancellationToken token = default(CancellationToken))
+		{
+			// Create the request.
+			var request = new RestRequest($"/REST/structure/workflows/{workflowId}/states.aspx?currentstate=null");
+
+			// Execute the request and parse the response.
+			var response = await this.MFWSClient.Get<List<WorkflowState>>(request, token)
+				.ConfigureAwait(false);
+
+			// Return the typed response.
+			return response.Data;
+		}
+
+		/// <summary>
+		/// Gets workflow first states in the provided workflow.
+		/// </summary>
+		/// <param name="workflowId">The workflow identifier.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public List<WorkflowState> GetWorkflowFirstStates(int workflowId, CancellationToken token = default(CancellationToken))
+		{
+			// Execute the async method.
+			return this.GetWorkflowFirstStatesAsync(workflowId, token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
 		}
 
 		#endregion

@@ -1438,6 +1438,45 @@ namespace MFaaP.MFWSClient
 
 		#endregion
 
+		#region Get latest object comments
+
+		/// <summary>
+		/// Gets latest object workflow state
+		/// </summary>
+		/// <param name="objectType">The object type.</param>
+		/// <param name="objectId">The object type.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public async Task<List<VersionComment>> GetLatestObjectCommentsAsync(int objectType, int objectId, CancellationToken token = default(CancellationToken))
+		{
+			// Create the request.
+			var request = new RestRequest($"/REST/objects//{objectType}/{objectId}/latest/comments.aspx");
+
+			// Execute the request and parse the response.
+			var response = await this.MFWSClient.Get<List<VersionComment>>(request, token)
+				.ConfigureAwait(false);
+
+			// Return the typed response.
+			return response.Data;
+		}
+
+		/// <summary>
+		/// Gets latest object workflow state
+		/// </summary>
+		/// <param name="objectType">The object type.</param>
+		/// <param name="objectId">The object type.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public List<VersionComment> GetLatestObjectComments(int objectType, int objectId, CancellationToken token = default(CancellationToken))
+		{
+			// Execute the async method.
+			return this.GetLatestObjectCommentsAsync(objectType, objectId, token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
+		}
+
+		#endregion
+
 	}
-	
+
 }
