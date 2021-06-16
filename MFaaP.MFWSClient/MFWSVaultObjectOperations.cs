@@ -1438,6 +1438,45 @@ namespace MFaaP.MFWSClient
 
 		#endregion
 
+		#region Get latest object workflow state
+
+		/// <summary>
+		/// Gets latest object workflow state
+		/// </summary>
+		/// <param name="objectType">The object type.</param>
+		/// <param name="objectId">The object type.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public async Task<ObjectWorkflowState> GetLatestObjectWorkflowStateAsync(int objectType, int objectId, CancellationToken token = default(CancellationToken))
+		{
+			// Create the request.
+			var request = new RestRequest($"/REST/objects//{objectType}/{objectId}/latest/workflowstate.aspx");
+
+			// Execute the request and parse the response.
+			var response = await this.MFWSClient.Get<ObjectWorkflowState>(request, token)
+				.ConfigureAwait(false);
+
+			// Return the typed response.
+			return response.Data;
+		}
+
+		/// <summary>
+		/// Gets latest object workflow state
+		/// </summary>
+		/// <param name="objectType">The object type.</param>
+		/// <param name="objectId">The object type.</param>
+		/// <returns>An awaitable task for the request.</returns>
+		public ObjectWorkflowState GetLatestObjectWorkflowState(int objectType, int objectId, CancellationToken token = default(CancellationToken))
+		{
+			// Execute the async method.
+			return this.GetLatestObjectWorkflowStateAsync(objectType, objectId, token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
+		}
+
+		#endregion
+
 		#region Get latest object comments
 
 		/// <summary>
@@ -1470,6 +1509,52 @@ namespace MFaaP.MFWSClient
 		{
 			// Execute the async method.
 			return this.GetLatestObjectCommentsAsync(objectType, objectId, token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
+		}
+
+		#endregion
+
+		#region Add Comment
+
+		/// <summary>
+		/// Add Comment To Object.
+		/// </summary>
+		/// <param name="objectTypeId">The type of the object.</param>
+		/// <param name="objectId">The id of the object.</param>
+		/// <param name="comment">The comment to add to the object.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>Extended Object Version.</returns>
+		public async Task<ExtendedObjectVersion> AddCommentAsync(int objectTypeId, int objectId, string comment, CancellationToken token = default(CancellationToken))
+		{
+
+
+			// Create the request.
+			var request = new RestRequest($"/REST/objects/{objectTypeId}/{objectId}/latest/comments");
+			request.AddJsonBody(comment);
+
+			// Make the request and get the response.
+			var response = await this.MFWSClient.Put<ExtendedObjectVersion>(request, token)
+				.ConfigureAwait(false);
+
+			// Return the data.
+			return response.Data;
+
+		}
+
+		/// <summary>
+		/// Add Comment To Object.
+		/// </summary>
+		/// <param name="objectTypeId">The type of the object.</param>
+		/// <param name="objectId">The id of the object.</param>
+		/// <param name="comment">The comment to add to the object.</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>Extended Object Version.</returns>
+		public ObjectVersion AddComment(int objectTypeId, int objectId, string comment, CancellationToken token = default(CancellationToken))
+		{
+			// Execute the async method.
+			return this.AddCommentAsync(objectTypeId, objectId, comment, token)
 				.ConfigureAwait(false)
 				.GetAwaiter()
 				.GetResult();
