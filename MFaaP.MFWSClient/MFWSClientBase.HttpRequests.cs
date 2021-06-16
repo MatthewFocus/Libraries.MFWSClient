@@ -332,7 +332,7 @@ namespace MFaaP.MFWSClient
 			// Note: we don't set the method to PUT as this is not supported in some IIS instances.
 			request.Method = Method.POST;
 			request.AddQueryParameter("_method", "PUT");
-
+	
 			// We only deal with Json.
 			request.RequestFormat = DataFormat.Json;
 

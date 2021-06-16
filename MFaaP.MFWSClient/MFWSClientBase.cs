@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
+using RestSharp.Serialization.Json;
 
 namespace MFaaP.MFWSClient
 {
@@ -159,6 +160,9 @@ namespace MFaaP.MFWSClient
 
 			// Set up the RestClient.
 			this.restClient = restClient;
+			this.restClient.UseSerializer(
+					() => new JsonSerializer { DateFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFFZ" }
+			);
 
 			// Set up our sub-objects.
 			this.ObjectSearchOperations = new MFWSVaultObjectSearchOperations(this);
