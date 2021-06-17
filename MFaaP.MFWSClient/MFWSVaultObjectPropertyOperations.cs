@@ -1269,6 +1269,40 @@ namespace MFaaP.MFWSClient
 		/// <param name="stateId">workflow State ID which needs to be set</param>
 		/// <param name="token">A cancellation token for the request.</param>
 		/// <returns>A representation of the updated object version</returns>
+		public ObjectVersion SetLatestWorkflowState(int objectType, int objectId, int stateId, CancellationToken token = default(CancellationToken))
+		{
+			return this.SetLatestWorkflowStateAsync(objectType, objectId, stateId, token)
+				.ConfigureAwait(false)
+				.GetAwaiter()
+				.GetResult();
+		}
+
+		/// <summary>
+		/// Sets Workflow state of the object
+		/// </summary>
+		/// <param name="objVer">The Id and version of the object.</param>
+		/// <param name="stateId">workflow State ID which needs to be set</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>A representation of the updated object version</returns>
+		public async Task<ObjectVersion> SetLatestWorkflowStateAsync(int objectType, int objectId, int stateId, CancellationToken token = default(CancellationToken))
+		{
+			// Create the request.
+			var request = new RestRequest($"/REST/objects/{objectType}/{objectId}/latest/workflowstate");
+			request.Method = Method.PUT;
+			request.AddJsonBody(new ObjectWorkflowState() { StateID = stateId });
+			// Execute the request and parse the response.
+			var response = await this.MFWSClient.Put<ExtendedObjectVersion>(request, token).ConfigureAwait(false);
+
+			return response.Data;
+		}
+
+		/// <summary>
+		/// Sets Workflow state of the object
+		/// </summary>
+		/// <param name="objVer">The Id and version of the object.</param>
+		/// <param name="stateId">workflow State ID which needs to be set</param>
+		/// <param name="token">A cancellation token for the request.</param>
+		/// <returns>A representation of the updated object version</returns>
 		public ObjectVersion SetWorkflowState(ObjVer objVer, int stateId, CancellationToken token = default(CancellationToken))
 		{
 			return this.SetWorkflowStateAsync(objVer, stateId, token)

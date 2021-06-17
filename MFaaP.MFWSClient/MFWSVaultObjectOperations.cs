@@ -1481,7 +1481,7 @@ namespace MFaaP.MFWSClient
 
 		/// <summary>
 		/// Gets latest object workflow state
-		/// </summary>
+		/// </summary> 
 		/// <param name="objectType">The object type.</param>
 		/// <param name="objectId">The object type.</param>
 		/// <param name="token">A cancellation token for the request.</param>
